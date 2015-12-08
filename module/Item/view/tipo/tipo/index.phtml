@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-12">
+	<h1>Lista de Tipos</h1>
+	<p>
+	    <a href="<?php echo $this->url('tipo', array('action' => 'add')); ?>" class="btn btn-primary">
+		Adicionar novo tipo
+	    </a>
+	</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<table class="table">
+	    <thead>
+		<tr class="row">
+		    <th class="col-md-5">Nome</th>
+		    <th class="col-md-5">Imposto</th>
+		    <th class="col-md-2 text-center">#</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		<?php foreach ($tipos as $i) : ?>
+		    <tr class="row">
+			<td class="col-md-5">
+			    
+			    <?php
+			    
+				$urlEdit = $this->url('tipo', array(
+				    'action' => 'edit',
+				    'id' => $this->escapeHtml($i->getId()) 
+				));
+				
+				$urlDelete = $this->url('tipo', array(
+				    'action' => 'delete',
+				    'id' => $this->escapeHtml($i->getId()) 
+				));
+			    ?>
+			    
+			    <a href="<?=$urlEdit?>" title="Clique para editar">
+			        <?php echo $this->escapeHtml($i->getNome()); ?>
+			    </a>
+			</td>
+			<td class="col-md-5">
+			    <?php echo $this->escapeHtml($i->getImpostoId()); ?>
+			</td>
+			<td class="col-md-2 text-center">
+			    <a href="<?=$urlDelete?>" class="btn btn-danger">Deletar</a>
+			</td>
+		    </tr>    
+		<?php endforeach; ?>
+	    </tbody>
+	</table>
+    </div>
+</div>
+
+
+

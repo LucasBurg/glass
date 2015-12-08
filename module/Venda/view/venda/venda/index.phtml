@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-12">
+	<h1>Vendas</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<?php 
+	    $url = $this->url('venda', array('action' => 'do')); 
+	    $form->setAttribute('action', $url);
+	    $form->setAttribute('autocomplete', 'off');
+	    $form->prepare();
+	    echo $this->form()->openTag($form);
+	    echo $this->formHidden($form->get('id'));
+	    echo $this->formInput($form->get('submit'));
+	    echo $this->form()->closeTag($form);
+	?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<table class="table">
+	    <thead>
+		<tr class="row">
+		    <th class="col-md-6">ID</th>
+		    <th class="col-md-6">Data confirmação</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		<?php foreach ($vendas as $i) : ?>
+		<tr class="row">
+		    <td class="col-md-6">
+			
+			<?php
+			    $id = $this->escapeHtml($i->getId());
+			    
+			    $url = $this->url('venda', array('action' => 'do', 'id' => $id));
+			?>
+			<a href="<?=$url?>"><?=$id?></a>
+			
+		    </td>
+		    <td class="col-md-6"><?=$this->escapeHtml($i->getDataConfirmacao())?></td>
+		</tr>
+		<?php endforeach; ?>
+	    </tbody>
+	</table>
+    </div>
+</div>

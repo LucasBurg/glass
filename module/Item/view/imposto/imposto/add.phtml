@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+	<h1>Adicionar novo imposto</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<?php
+	    $form = $this->form;
+	    $url  = $this->url('imposto', array('action' => 'add'));
+	    
+	    $form->setAttribute('action', $url);
+	    $form->setAttribute('autocomplete', 'off');
+	    $form->get('submit')->setAttribute('value', 'Adicionar');
+	    $form->prepare();
+	    
+	    echo $this->form()->openTag($form);
+	    echo $this->formHidden($form->get('id'));
+	    echo $this->formRow($form->get('nome'));
+	    echo '<br>';
+	    echo $this->formRow($form->get('percentual'));
+	    echo '<br>';
+	    echo $this->formRow($form->get('descricao'));
+	    echo '<br>';
+	    echo $this->formInput($form->get('submit'));
+	    echo $this->form()->closeTag($form);
+	?>
+    </div>
+</div>

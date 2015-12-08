@@ -1,0 +1,101 @@
+<?php $this->headScript()->appendFile('/js/bootstrap3-typeahead.min.js'); ?>
+<?php $this->headScript()->appendFile('/js/inputmask/min/jquery.inputmask.bundle.min.js'); ?>
+<?php $this->headScript()->appendFile('/js/script.js', 'text/javascript'); ?>
+<div class="row">
+    <div class="col-md-12">
+	<h1>Venda ID: <?=$venda->getId();?> Data: <?=$venda->getDataConfirmacao()?></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+	<form name="formTotal" id="formTotal" method="POST" action="<?=$this->url('venda', array('action' => 'total'))?>">
+	    <input type="hidden" name="venda_id" value="<?=$venda->getId()?>">
+	    <button type="button" id="btn_total_venda" class="btn btn-primary pull-right col-md-4">Totalizar Venda</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+	<a href="#sem-acao" class="btn btn-danger pull-left col-md-4">Cancelar</a>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-6">
+	<input type="text" id="input_total" class="form-control" value="Total da venda: R$<?=$total['total']?>" disabled>
+    </div>
+    <div class="col-md-6">
+	<input type="text" id="input_imposto" class="form-control" value="Total de imposto: R$<?=$total['imposto']?>" disabled>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<?php
+	    $url = $this->url('venda', array('action' => 'do', 'id' => $id)); 
+	    $form->setAttribute('action', $url);
+	    $form->setAttribute('autocomplete', 'off');
+	    $form->setAttribute('class', 'form-inline');
+	    
+	    $form->prepare();
+	    echo $this->form()->openTag($form);
+	    echo $this->formHidden($form->get('venda_id'));
+	    echo $this->formHidden($form->get('item_id'));
+	?>
+	
+	<input type="hidden" id="preco" value=""/>
+	<input type="hidden" id="percentual" value=""/>
+	
+	<?php $element = $form->get('item_nome');?>
+	<div class="form-group">
+	    <label><?=$element->getOption('label');?></label>
+	    <?=$this->formInput($element)?>
+	    <?=$this->formElementErrors($element);?>
+	</div>
+	
+	<?php $element = $form->get('quantidade');?>
+	<div class="form-group">
+	    <label><?=$element->getOption('label');?></label>
+	    <?=$this->formInput($element)?>
+	    <?=$this->formElementErrors($element);?>
+	</div>
+	
+	<?php $element = $form->get('total');?>
+	<div class="form-group">
+	    <label><?=$element->getOption('label');?></label>
+	    <?=$this->formInput($element)?>
+	    <?=$this->formElementErrors($element);?>
+	</div>
+	
+	<?php $element = $form->get('imposto');?>
+	<div class="form-group">
+	    <label><?=$element->getOption('label');?></label>
+	    <?=$this->formInput($element)?>
+	    <?=$this->formElementErrors($element);?>
+	</div>
+	<?=$this->formButton($form->get('btn_add_item'));?>
+	<?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-12">
+	<table id="tableDo" class="table table-striped">
+	    <thead>
+		<tr>
+		    <th>Nome</th>
+		    <th>Quantidade</th>
+		    <th>Total</th>
+		    <th>Imposto</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		<?php foreach ($itens as $key => $item): ?>
+		<tr>
+		    <td><?=$item['nome']?></td>
+		    <td><?=$item['quantidade']?></td>
+		    <td><?=$item['total']?></td>
+		    <td><?=$item['imposto']?></td>
+		</tr>
+		<?php endforeach; ?>
+	    </tbody>
+	</table>
+    </div>
+</div>

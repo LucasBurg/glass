@@ -1,0 +1,66 @@
+<?php
+    $urlAdd = $this->url('item', array(
+	'action' => 'add'
+    ));
+?>
+<div class="row">
+    <div class="col-md-12">
+	<h1>Lista de Itens</h1>
+	<p>
+	    <a href="<?=$urlAdd?>" class="btn btn-primary">
+		Adicionar novo item
+	    </a>
+	</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<table class="table">
+	    <thead>
+		<tr class="row">
+		    <th class="col-md-6">Nome</th>
+		    <th class="col-md-2">Preço</th>
+		    <th class="col-md-2">Tipo</th>
+		    <th class="col-md-2 text-center">#</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		<?php 
+		    foreach ($itens as $i) : 
+		
+		    $urlEdit = $this->url('item', array(
+			'action' => 'edit',
+			'id' => $this->escapeHtml($i->getId()) 
+		    ));
+
+		    $urlDelete = $this->url('item', array(
+			'action' => 'delete',
+			'id' => $this->escapeHtml($i->getId()) 
+		    ));    
+		    
+		?>
+		    <tr class="row">
+			<td class="col-md-6">
+			    <a href="<?=$urlEdit?>" title="Clique para editar">
+			        <?php echo $this->escapeHtml($i->getNome()); ?>
+			    </a>
+			</td>
+			<td class="col-md-2">
+			    <?php echo $this->escapeHtml($i->getPreco()); ?>
+			</td>
+			<td class="col-md-2">
+			    <?php echo $this->escapeHtml($i->getTipoId()); ?>
+			</td>
+			<td class="col-md-2 text-center">
+			    <a href="<?=$urlDelete?>" class="btn btn-danger">Deletar</a>
+			</td>
+		    </tr>    
+		<?php endforeach; ?>
+	    </tbody>
+	</table>
+    </div>
+</div>
+
+
+
+

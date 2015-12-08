@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-12">
+	<h1>Editar</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+	<?php
+	    $form = $this->form;
+	    $url  = $this->url('item', array('action' => 'edit', 'id' => $id));
+	    
+	    $form->setAttribute('action', $url);
+	    $form->setAttribute('autocomplete', 'off');
+	    $form->get('submit')->setAttribute('value', 'Editar');
+	    $form->prepare();
+	    
+	    echo $this->form()->openTag($form);
+	    echo $this->formHidden($form->get('id'));
+	    echo $this->formRow($form->get('nome'));
+	    echo '<br>';
+	    echo $this->formRow($form->get('preco'));
+	    echo '<br>';
+	    echo $this->formRow($form->get('tipo_id'));
+	    echo '<br>';
+	    echo $this->formInput($form->get('submit'));
+	    echo $this->form()->closeTag($form);
+	?>
+    </div>
+</div>
+

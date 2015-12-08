@@ -1,0 +1,12 @@
+<h1>Deletar tipo</h1>
+
+ <p>Você tem certeza que deseja deletar o tipo 
+   '<?php echo $this->escapeHtml($tipo->getNome()); ?>' ?
+ </p>
+ <?php $url = $this->url('tipo', array('action' => 'delete', 'id' => $id)); ?>
+ <form action="<?php echo $url; ?>" method="post">
+ <div>
+   <input type="submit" name="del" value="Sim" />
+   <input type="submit" name="del" value="Não" />
+ </div>
+ </form>

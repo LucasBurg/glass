@@ -1,0 +1,12 @@
+<h1>Deletar imposto</h1>
+
+ <p>Você tem certeza que deseja deletar o imposto 
+   '<?php echo $this->escapeHtml($imposto->getNome()); ?>' ?
+ </p>
+ <?php $url = $this->url('imposto', array('action' => 'delete', 'id' => $id)); ?>
+ <form action="<?php echo $url; ?>" method="post">
+ <div>
+   <input type="submit" name="del" value="Sim" />
+   <input type="submit" name="del" value="Não" />
+ </div>
+ </form>
