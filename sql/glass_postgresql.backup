@@ -1,0 +1,701 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.2.14
+-- Dumped by pg_dump version 9.2.14
+-- Started on 2015-12-03 23:19:48
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 183 (class 3079 OID 11727)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2001 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 182 (class 1259 OID 16577)
+-- Name: imposto_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE imposto_seq
+    START WITH 6
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.imposto_seq OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 176 (class 1259 OID 16557)
+-- Name: imposto; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE imposto (
+    id integer DEFAULT nextval('imposto_seq'::regclass) NOT NULL,
+    percentual integer NOT NULL,
+    nome character varying(45) DEFAULT ''::character varying NOT NULL,
+    descricao character varying(45)
+);
+
+
+ALTER TABLE public.imposto OWNER TO postgres;
+
+--
+-- TOC entry 175 (class 1259 OID 16555)
+-- Name: imposto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE imposto_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.imposto_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2002 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: imposto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE imposto_id_seq OWNED BY imposto.id;
+
+
+--
+-- TOC entry 179 (class 1259 OID 16568)
+-- Name: item_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE item_seq
+    START WITH 13
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.item_seq OWNER TO postgres;
+
+--
+-- TOC entry 169 (class 1259 OID 16534)
+-- Name: item; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE item (
+    id integer DEFAULT nextval('item_seq'::regclass) NOT NULL,
+    tipo_id integer NOT NULL,
+    nome character varying(45) DEFAULT ''::character varying NOT NULL,
+    preco numeric(15,2) NOT NULL
+);
+
+
+ALTER TABLE public.item OWNER TO postgres;
+
+--
+-- TOC entry 168 (class 1259 OID 16532)
+-- Name: item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE item_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.item_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2003 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE item_id_seq OWNED BY item.id;
+
+
+--
+-- TOC entry 177 (class 1259 OID 16562)
+-- Name: item_venda; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE item_venda (
+    item_id integer NOT NULL,
+    venda_id integer NOT NULL,
+    quantidade integer NOT NULL,
+    total numeric(15,2) NOT NULL,
+    imposto numeric(15,2) NOT NULL
+);
+
+
+ALTER TABLE public.item_venda OWNER TO postgres;
+
+--
+-- TOC entry 178 (class 1259 OID 16565)
+-- Name: item_venda_total; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE item_venda_total (
+    item_venda_item_id integer NOT NULL,
+    item_venda_venda_id integer NOT NULL,
+    quantidade integer NOT NULL,
+    total numeric(15,2) NOT NULL,
+    imposto numeric(15,2) NOT NULL
+);
+
+
+ALTER TABLE public.item_venda_total OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 16574)
+-- Name: tipo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tipo_seq
+    START WITH 9
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tipo_seq OWNER TO postgres;
+
+--
+-- TOC entry 174 (class 1259 OID 16550)
+-- Name: tipo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tipo (
+    id integer DEFAULT nextval('tipo_seq'::regclass) NOT NULL,
+    nome character varying(45) DEFAULT ''::character varying NOT NULL,
+    imposto_id integer NOT NULL
+);
+
+
+ALTER TABLE public.tipo OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 16548)
+-- Name: tipo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tipo_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tipo_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2004 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: tipo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tipo_id_seq OWNED BY tipo.id;
+
+
+--
+-- TOC entry 180 (class 1259 OID 16571)
+-- Name: venda_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE venda_seq
+    START WITH 101
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.venda_seq OWNER TO postgres;
+
+--
+-- TOC entry 172 (class 1259 OID 16544)
+-- Name: venda; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE venda (
+    id integer DEFAULT nextval('venda_seq'::regclass) NOT NULL,
+    data_confirmacao timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.venda OWNER TO postgres;
+
+--
+-- TOC entry 171 (class 1259 OID 16542)
+-- Name: venda_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE venda_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.venda_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2005 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: venda_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE venda_id_seq OWNED BY venda.id;
+
+
+--
+-- TOC entry 170 (class 1259 OID 16539)
+-- Name: venda_total; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE venda_total (
+    venda_id integer NOT NULL,
+    total numeric(15,2) NOT NULL,
+    imposto numeric(15,2) NOT NULL
+);
+
+
+ALTER TABLE public.venda_total OWNER TO postgres;
+
+--
+-- TOC entry 1987 (class 0 OID 16557)
+-- Dependencies: 176
+-- Data for Name: imposto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY imposto (id, percentual, nome, descricao) FROM stdin;
+1	14	Taxa transporte	
+2	7	Mão de obra	Ainda pode aumentar
+3	3	Embalagem refrigerada	Para transporte acima de 5km
+4	5	Moto boy	Para longas distâncias
+5	12	Aluguel	Dos carros importados
+\.
+
+
+--
+-- TOC entry 2006 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: imposto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('imposto_id_seq', 1, false);
+
+
+--
+-- TOC entry 2007 (class 0 OID 0)
+-- Dependencies: 182
+-- Name: imposto_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('imposto_seq', 6, false);
+
+
+--
+-- TOC entry 1980 (class 0 OID 16534)
+-- Dependencies: 169
+-- Data for Name: item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY item (id, tipo_id, nome, preco) FROM stdin;
+10	5	Pão	0.10
+11	3	Leite	2.50
+12	5	*TRIAL*TRIAL*TRIAL*	5.00
+\.
+
+
+--
+-- TOC entry 2008 (class 0 OID 0)
+-- Dependencies: 168
+-- Name: item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('item_id_seq', 1, false);
+
+
+--
+-- TOC entry 2009 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: item_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('item_seq', 13, false);
+
+
+--
+-- TOC entry 1988 (class 0 OID 16562)
+-- Dependencies: 177
+-- Data for Name: item_venda; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY item_venda (item_id, venda_id, quantidade, total, imposto) FROM stdin;
+10	1	1	0.10	0.01
+10	4	50	5.00	0.25
+10	5	100	10.00	0.50
+10	12	1	0.10	0.01
+10	16	130	13.00	0.65
+10	20	1	0.10	0.01
+10	28	1	0.10	0.01
+10	35	30	3.00	0.15
+10	48	3	0.30	0.02
+10	55	2	0.20	0.01
+10	100	1	0.10	0.01
+11	1	12	30.00	1.50
+11	4	40	100.00	5.00
+11	5	1	2.50	0.13
+11	12	1	2.50	0.35
+11	16	40	100.00	14.00
+11	20	1	2.50	0.35
+11	28	1	2.50	0.35
+11	33	1	2.50	0.35
+11	35	40	100.00	14.00
+11	36	1	2.50	0.35
+11	48	1	2.50	0.35
+11	55	2	5.00	0.70
+11	100	1	2.50	0.35
+12	1	7	35.00	1.75
+12	4	5	25.00	1.25
+12	12	1	5.00	0.25
+12	16	40	200.00	10.00
+12	20	1	5.00	0.25
+12	28	1	5.00	0.25
+12	35	2	10.00	0.50
+12	55	5	25.00	1.25
+\.
+
+
+--
+-- TOC entry 1989 (class 0 OID 16565)
+-- Dependencies: 178
+-- Data for Name: item_venda_total; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY item_venda_total (item_venda_item_id, item_venda_venda_id, quantidade, total, imposto) FROM stdin;
+\.
+
+
+--
+-- TOC entry 1985 (class 0 OID 16550)
+-- Dependencies: 174
+-- Data for Name: tipo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tipo (id, nome, imposto_id) FROM stdin;
+1	*TRIAL*TRIAL*TRIAL*	4
+3	Frio	1
+5	*TRIAL*TRIAL*TRIAL*	4
+8	Movimentação	3
+\.
+
+
+--
+-- TOC entry 2010 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: tipo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tipo_id_seq', 1, false);
+
+
+--
+-- TOC entry 2011 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: tipo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tipo_seq', 9, false);
+
+
+--
+-- TOC entry 1983 (class 0 OID 16544)
+-- Dependencies: 172
+-- Data for Name: venda; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY venda (id, data_confirmacao) FROM stdin;
+1	2015-11-30 00:02:40
+2	2015-11-30 00:03:06
+3	2015-11-30 00:03:11
+4	2015-11-30 00:03:17
+5	2015-11-30 00:06:56
+6	2015-11-30 00:09:39
+7	2015-11-30 00:09:52
+8	2015-11-30 00:11:22
+9	2015-11-30 00:11:44
+10	2015-11-30 00:12:12
+11	2015-11-30 00:12:51
+12	2015-11-30 00:12:51
+13	2015-11-30 00:12:51
+14	2015-11-30 00:12:51
+15	2015-11-30 00:12:52
+16	2015-11-30 00:12:52
+17	2015-11-30 00:12:52
+18	2015-11-30 00:12:52
+19	2015-11-30 00:12:52
+20	2015-11-30 00:12:53
+21	2015-11-30 00:12:53
+22	2015-11-30 00:12:53
+23	2015-11-30 00:12:53
+24	2015-11-30 00:12:53
+25	2015-11-30 00:12:54
+26	2015-11-30 00:12:54
+27	2015-11-30 00:12:54
+28	2015-11-30 00:12:54
+29	2015-11-30 00:12:54
+30	2015-11-30 00:12:55
+31	2015-11-30 00:12:55
+32	2015-11-30 00:12:55
+33	2015-11-30 00:12:55
+34	2015-11-30 00:12:55
+35	2015-11-30 00:12:56
+36	2015-11-30 00:12:56
+37	2015-11-30 00:12:56
+38	2015-11-30 00:12:56
+39	2015-11-30 00:12:56
+40	2015-11-30 00:12:57
+41	2015-11-30 00:12:57
+42	2015-11-30 00:12:57
+43	2015-11-30 00:12:57
+44	2015-11-30 00:12:57
+45	2015-11-30 00:12:58
+46	2015-11-30 00:12:58
+47	2015-11-30 00:12:58
+48	2015-11-30 00:12:58
+49	2015-11-30 00:12:58
+50	2015-11-30 00:12:59
+51	2015-11-30 00:12:59
+52	2015-11-30 00:12:59
+53	2015-11-30 00:13:05
+54	2015-11-30 00:13:05
+55	2015-11-30 00:13:06
+56	2015-11-30 00:13:06
+57	2015-11-30 00:13:06
+58	2015-11-30 00:13:06
+59	2015-11-30 00:13:06
+60	2015-11-30 00:13:07
+61	2015-11-30 00:13:07
+62	2015-11-30 00:13:07
+63	2015-11-30 00:13:07
+64	2015-11-30 00:13:07
+65	2015-11-30 00:13:08
+66	2015-11-30 00:13:08
+67	2015-11-30 00:13:08
+68	2015-11-30 00:13:08
+69	2015-11-30 00:13:08
+70	2015-11-30 00:13:09
+71	2015-11-30 00:13:09
+72	2015-11-30 00:13:09
+73	2015-11-30 00:13:09
+74	2015-11-30 00:13:09
+75	2015-11-30 00:13:10
+76	2015-11-30 00:13:10
+77	2015-11-30 00:13:10
+78	2015-11-30 00:13:10
+79	2015-11-30 00:13:10
+80	2015-11-30 00:13:11
+81	2015-11-30 00:13:11
+82	2015-11-30 00:13:11
+83	2015-11-30 00:13:11
+84	2015-11-30 00:14:48
+85	2015-11-30 00:15:04
+86	2015-11-30 00:16:55
+87	2015-11-30 00:17:50
+88	2015-11-30 00:18:29
+89	2015-11-30 00:19:16
+90	2015-11-30 00:20:38
+91	2015-11-30 00:20:45
+92	2015-11-30 00:20:55
+93	2015-11-30 20:43:33
+94	2015-11-30 20:43:41
+95	2015-11-30 20:44:03
+96	2015-11-30 20:44:11
+97	2015-11-30 20:45:23
+98	2015-11-30 22:50:43
+99	2015-12-01 22:57:11
+100	2015-12-03 22:24:37
+\.
+
+
+--
+-- TOC entry 2012 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: venda_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('venda_id_seq', 1, false);
+
+
+--
+-- TOC entry 2013 (class 0 OID 0)
+-- Dependencies: 180
+-- Name: venda_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('venda_seq', 101, false);
+
+
+--
+-- TOC entry 1981 (class 0 OID 16539)
+-- Dependencies: 170
+-- Data for Name: venda_total; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY venda_total (venda_id, total, imposto) FROM stdin;
+1	65.10	3.26
+4	130.00	6.50
+33	2.50	0.35
+48	2.80	0.37
+55	5.20	0.71
+100	2.60	0.36
+\.
+
+
+--
+-- TOC entry 1864 (class 2606 OID 16588)
+-- Name: primary key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY tipo
+    ADD CONSTRAINT "primary key" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1861 (class 2606 OID 16586)
+-- Name: primary key1; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY venda
+    ADD CONSTRAINT "primary key1" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1870 (class 2606 OID 16593)
+-- Name: primary key2; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY item_venda
+    ADD CONSTRAINT "primary key2" PRIMARY KEY (item_id, venda_id);
+
+
+--
+-- TOC entry 1866 (class 2606 OID 16591)
+-- Name: primary key3; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY imposto
+    ADD CONSTRAINT "primary key3" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1872 (class 2606 OID 16597)
+-- Name: primary key4; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY item_venda_total
+    ADD CONSTRAINT "primary key4" PRIMARY KEY (item_venda_item_id, item_venda_venda_id);
+
+
+--
+-- TOC entry 1857 (class 2606 OID 16581)
+-- Name: primary key5; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY item
+    ADD CONSTRAINT "primary key5" PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1859 (class 2606 OID 16584)
+-- Name: primary key6; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY venda_total
+    ADD CONSTRAINT "primary key6" PRIMARY KEY (venda_id);
+
+
+--
+-- TOC entry 1867 (class 1259 OID 16595)
+-- Name: fk_item_has_venda_item1_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fk_item_has_venda_item1_idx ON item_venda USING btree (item_id);
+
+
+--
+-- TOC entry 1868 (class 1259 OID 16594)
+-- Name: fk_item_has_venda_venda1_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fk_item_has_venda_venda1_idx ON item_venda USING btree (venda_id);
+
+
+--
+-- TOC entry 1855 (class 1259 OID 16582)
+-- Name: fk_item_item_tipo1_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fk_item_item_tipo1_idx ON item USING btree (tipo_id);
+
+
+--
+-- TOC entry 1862 (class 1259 OID 16589)
+-- Name: fk_tipo_imposto1_idx; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fk_tipo_imposto1_idx ON tipo USING btree (imposto_id);
+
+
+--
+-- TOC entry 2000 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2015-12-03 23:19:48
+
+--
+-- PostgreSQL database dump complete
+--
+
